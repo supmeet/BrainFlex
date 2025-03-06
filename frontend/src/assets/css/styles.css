@@ -1,0 +1,181 @@
+/* src/assets/css/styles.css */
+
+/* Root Variables for Colors */
+:root {
+  --bg-primary: #121826;
+  --accent-primary: #00A3FF;
+  --text-primary: #F5F5F5;
+  --button-primary: #007BFF;
+  --border-color: #1E293B;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Header Styles */
+.header {
+  background-color: var(--bg-primary);
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+}
+
+.logo-image {
+  width: 80px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 1rem;
+}
+
+.text-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo-title {
+  font-size: 2.5rem;
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.tagline {
+  font-size: 1.2rem;
+  color: var(--text-primary);
+  opacity: 0.8;
+  margin: 0;
+}
+
+/* Navbar Styles */
+.navbar {
+  background-color: var(--border-color);
+  padding: 1rem 0;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+}
+
+.nav-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-primary);
+}
+
+/* Home Container Styles */
+.home-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 2rem;
+}
+
+/* Game Card Styles */
+.game-card {
+  position: relative;
+  background-color: var(--border-color);
+  border-radius: 5px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 0 20px rgba(0, 163, 255, 0.3);
+}
+
+.card-content {
+  padding: 1rem;
+  text-align: center;
+}
+
+.game-logo {
+  width: 120px; /* Adjust size as needed */
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.game-title {
+  color: var(--accent-primary);
+  margin: 0;
+}
+
+.card-hover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  padding: 1rem;
+  text-align: center;
+}
+
+.game-card:hover .card-hover {
+  opacity: 1;
+}
+
+/* Footer Styles */
+.footer {
+  background-color: var(--border-color);
+  padding: 1.5rem;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer-links {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+}
+
+.footer-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+  color: var(--accent-primary);
+}

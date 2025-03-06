@@ -1,0 +1,8 @@
+Docs/
+Public/
+
+
+Backend/.env
+Backend/node_modules/
+
+Frontend/.env
