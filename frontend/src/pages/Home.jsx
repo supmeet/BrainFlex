@@ -13,6 +13,7 @@ const Home = () => {
       title: "WordWrap",
       description: "Test your vocabulary with this challenging word puzzle!",
       logo: wordWrapLogo,
+      link: "/games/wordwrap",
     },
     {
       title: "Scrumble",
@@ -63,6 +64,7 @@ const Home = () => {
               title={game.title}
               description={game.description}
               logo={game.logo}
+              link={game.link}
             />
           ))}
         </div>
