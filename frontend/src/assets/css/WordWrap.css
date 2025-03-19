@@ -1,4 +1,4 @@
-/* src/pages/WordWrap.css */
+/* src/assets/css/WordWrap.css */
 .wordwrap-container {
   display: flex;
   flex-direction: column;
@@ -7,61 +7,23 @@
   min-height: 100vh;
   background-color: #121826;
   color: #f5f5f5;
-  padding: 20px;
 }
 
-.popup {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.8);
+.content-area {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  z-index: 1000;
-}
-
-.popup-content {
-  background-color: #1e293b;
-  padding: 20px;
-  border-radius: 8px;
-  text-align: center;
-}
-
-.popup-content h2 {
-  margin-bottom: 10px;
-}
-
-.popup-content p {
-  margin-bottom: 20px;
-}
-
-.popup-content button {
-  background-color: #00a3ff;
-  color: #f5f5f5;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.popup-content button:hover {
-  background-color: #007bff;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .game-area {
+  flex: 2;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   margin-top: 20px;
-}
-
-.grid {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
 }
 
 .grid-row {
@@ -79,18 +41,18 @@
   margin: 2px;
   font-size: 24px;
   color: #f5f5f5;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-.feedback {
-  display: flex;
-  flex-direction: column;
-  margin-left: 20px;
+.grid-cell.active {
+  border-color: #00a3ff;
+  background-color: rgba(0, 163, 255, 0.2);
 }
 
 .feedback-row {
   display: flex;
   align-items: center;
-  margin-bottom: 10px;
+  margin-left: 20px;
 }
 
 .circle {
@@ -136,7 +98,6 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 18px;
-  font-weight: 200;
 }
 
 .key:hover {

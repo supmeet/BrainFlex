@@ -1,13 +1,37 @@
 // src/pages/WordWrap.jsx
 import React, { useState, useEffect } from "react";
+import DynamicHeader from "../components/DynamicHeader";
+import DynamicInstructions from "../components/DynamicInstructions";
 import "../assets/css/WordWrap.css";
+import wordWrapLogo from "../assets/images/WordWrap-Logo.webp";
 
 const WordWrap = () => {
+  const instructions = [
+    { text: "Guess the 4-letter word in 8 attempts." },
+    { text: "No repeating letters in the word." },
+    {
+      text: "Feedback is provided for each guess:",
+      subInstructions: [
+        {
+          text: "Green: Correct letter in the correct position.",
+          color: "green",
+        },
+        {
+          text: "Yellow: Correct letter in the wrong position.",
+          color: "yellow",
+        },
+        { text: "Gray: Letter not in the word.", color: "gray" },
+      ],
+    },
+  ];
+
   const secretWord = "WORD"; // Hardcoded secret word
   const [showPopup, setShowPopup] = useState(true);
   const [currentGuess, setCurrentGuess] = useState("");
   const [guesses, setGuesses] = useState([]);
   const [feedback, setFeedback] = useState([]);
+  const [cursorPosition, setCursorPosition] = useState(0);
+  const [showCongrats, setShowCongrats] = useState(false);
 
   const startGame = () => {
     setShowPopup(false);
@@ -31,6 +55,11 @@ const WordWrap = () => {
       setGuesses([...guesses, currentGuess]);
       setFeedback([...feedback, newFeedback]);
       setCurrentGuess("");
+      setCursorPosition(guesses.length + 1);
+
+      if (currentGuess === secretWord) {
+        setShowCongrats(true);
+      }
     }
   };
 
@@ -73,25 +102,29 @@ const WordWrap = () => {
 
   return (
     <div className="wordwrap-container">
-      {showPopup && (
-        <div className="popup">
-          <div className="popup-content">
-            <h2>How to Play WordWrap</h2>
-            <p>Guess the 4-letter word in 8 attempts. No repeating letters!</p>
-            <p>
-              Green: Correct position. Yellow: Wrong position. Gray: Not in
-              word.
-            </p>
-            <button onClick={startGame}>Start Game</button>
-          </div>
-        </div>
-      )}
-      <div className="game-area">
-        <div className="grid">
+      <DynamicHeader
+        logo={wordWrapLogo}
+        title="WordWrap"
+        tagline="Challenge Your Vocabulary!"
+      />
+      <div className="content-area">
+        <DynamicInstructions
+          title="How to Play WordWrap"
+          instructions={instructions}
+        />
+        <div className="game-area">
           {[...Array(8)].map((_, rowIndex) => (
             <div key={rowIndex} className="grid-row">
               {[...Array(4)].map((_, colIndex) => (
-                <div key={colIndex} className="grid-cell">
+                <div
+                  key={colIndex}
+                  className={`grid-cell ${
+                    rowIndex === cursorPosition &&
+                    colIndex === currentGuess.length
+                      ? "active"
+                      : ""
+                  }`}
+                >
                   {guesses[rowIndex]
                     ? guesses[rowIndex][colIndex]
                     : rowIndex === guesses.length
@@ -124,6 +157,15 @@ const WordWrap = () => {
           ⌫
         </div>
       </div>
+      {showCongrats && (
+        <div className="popup">
+          <div className="popup-content">
+            <h2>Congratulations!</h2>
+            <p>You guessed the word correctly!</p>
+            <button onClick={() => setShowCongrats(false)}>Close</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
