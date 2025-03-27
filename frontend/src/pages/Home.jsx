@@ -56,7 +56,7 @@ const Home = () => {
     <div className="home-container">
       <Header />
       <Navbar />
-      <main className="main-content">
+      <main className="main-content1">
         <div className="games-grid">
           {games.map((game, index) => (
             <GameCard

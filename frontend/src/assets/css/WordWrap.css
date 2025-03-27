@@ -103,3 +103,16 @@
 .key:hover {
   background-color: #00a3ff;
 }
+
+/* Feedback colors */
+.grid-cell.green {
+  background-color: #39ff14;
+}
+
+.grid-cell.yellow {
+  background-color: #ffd700;
+}
+
+.grid-cell.gray {
+  background-color: #333;
+}

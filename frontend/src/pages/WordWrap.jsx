@@ -1,11 +1,43 @@
 // src/pages/WordWrap.jsx
-import React, { useState, useEffect } from "react";
+import React, { useReducer, useEffect } from "react";
 import DynamicHeader from "../components/DynamicHeader";
 import DynamicInstructions from "../components/DynamicInstructions";
-import "../assets/css/WordWrap.css";
+import GridCell from "../components/GridCell";
+import KeyboardKey from "../components/KeyboardKey";
 import wordWrapLogo from "../assets/images/WordWrap-Logo.webp";
+import "../assets/css/WordWrap.css";
+
+const initialState = {
+  currentGuess: "",
+  guesses: [],
+  feedback: [],
+  showCongrats: false,
+};
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "SET_GUESS":
+      return { ...state, currentGuess: action.payload };
+    case "SUBMIT_GUESS":
+      const newFeedback = calculateFeedback(action.payload);
+      const isCorrect = action.payload === secretWord;
+      return {
+        ...state,
+        guesses: [...state.guesses, action.payload],
+        feedback: [...state.feedback, newFeedback],
+        currentGuess: "",
+        showCongrats: isCorrect,
+      };
+    default:
+      return state;
+  }
+};
+
+const secretWord = "WORD";
 
 const WordWrap = () => {
+  const [state, dispatch] = useReducer(reducer, initialState);
+
   const instructions = [
     { text: "Guess the 4-letter word in 8 attempts." },
     { text: "No repeating letters in the word." },
@@ -25,65 +57,14 @@ const WordWrap = () => {
     },
   ];
 
-  const secretWord = "WORD"; // Hardcoded secret word
-  const [showPopup, setShowPopup] = useState(true);
-  const [currentGuess, setCurrentGuess] = useState("");
-  const [guesses, setGuesses] = useState([]);
-  const [feedback, setFeedback] = useState([]);
-  const [cursorPosition, setCursorPosition] = useState(0);
-  const [showCongrats, setShowCongrats] = useState(false);
-
-  const startGame = () => {
-    setShowPopup(false);
-  };
-
   const handleKeyPress = (key) => {
-    if (key === "ENTER") {
-      if (currentGuess.length === 4) {
-        submitGuess();
-      }
+    if (key === "ENTER" && state.currentGuess.length === 4) {
+      dispatch({ type: "SUBMIT_GUESS", payload: state.currentGuess });
     } else if (key === "BACKSPACE") {
-      setCurrentGuess(currentGuess.slice(0, -1));
-    } else if (currentGuess.length < 4 && /^[A-Z]$/.test(key)) {
-      setCurrentGuess(currentGuess + key);
+      dispatch({ type: "SET_GUESS", payload: state.currentGuess.slice(0, -1) });
+    } else if (state.currentGuess.length < 4 && /^[A-Z]$/.test(key)) {
+      dispatch({ type: "SET_GUESS", payload: state.currentGuess + key });
     }
-  };
-
-  const submitGuess = () => {
-    if (currentGuess.length === 4) {
-      const newFeedback = calculateFeedback(currentGuess);
-      setGuesses([...guesses, currentGuess]);
-      setFeedback([...feedback, newFeedback]);
-      setCurrentGuess("");
-      setCursorPosition(guesses.length + 1);
-
-      if (currentGuess === secretWord) {
-        setShowCongrats(true);
-      }
-    }
-  };
-
-  const calculateFeedback = (guess) => {
-    let greenCount = 0;
-    let yellowCount = 0;
-    const secretArray = secretWord.split("");
-    const guessArray = guess.split("");
-
-    guessArray.forEach((letter, index) => {
-      if (letter === secretArray[index]) {
-        greenCount++;
-        secretArray[index] = null; // Mark as used
-      }
-    });
-
-    guessArray.forEach((letter, index) => {
-      if (secretArray.includes(letter) && letter !== secretWord[index]) {
-        yellowCount++;
-        secretArray[secretArray.indexOf(letter)] = null; // Mark as used
-      }
-    });
-
-    return { green: greenCount, yellow: yellowCount };
   };
 
   useEffect(() => {
@@ -98,7 +79,7 @@ const WordWrap = () => {
     return () => {
       window.removeEventListener("keydown", handlePhysicalKeyPress);
     };
-  }, [currentGuess]);
+  }, [state.currentGuess]);
 
   return (
     <div className="wordwrap-container">
@@ -116,58 +97,64 @@ const WordWrap = () => {
           {[...Array(8)].map((_, rowIndex) => (
             <div key={rowIndex} className="grid-row">
               {[...Array(4)].map((_, colIndex) => (
-                <div
+                <GridCell
                   key={colIndex}
-                  className={`grid-cell ${
-                    rowIndex === cursorPosition &&
-                    colIndex === currentGuess.length
-                      ? "active"
-                      : ""
-                  }`}
-                >
-                  {guesses[rowIndex]
-                    ? guesses[rowIndex][colIndex]
-                    : rowIndex === guesses.length
-                    ? currentGuess[colIndex] || ""
-                    : ""}
-                </div>
+                  letter={
+                    state.guesses[rowIndex]?.[colIndex] ||
+                    (rowIndex === state.guesses.length
+                      ? state.currentGuess[colIndex] || ""
+                      : "")
+                  }
+                  feedback={state.feedback[rowIndex]?.[colIndex]}
+                  isActive={
+                    rowIndex === state.guesses.length &&
+                    colIndex === state.currentGuess.length
+                  }
+                />
               ))}
-              <div className="feedback-row">
-                <div className="circle green-circle">
-                  {feedback[rowIndex]?.green || 0}
-                </div>
-                <div className="circle yellow-circle">
-                  {feedback[rowIndex]?.yellow || 0}
-                </div>
-              </div>
             </div>
           ))}
         </div>
       </div>
       <div className="keyboard">
         {"QWERTYUIOPASDFGHJKLZXCVBNM".split("").map((key) => (
-          <div key={key} className="key" onClick={() => handleKeyPress(key)}>
-            {key}
-          </div>
+          <KeyboardKey key={key} letter={key} onClick={handleKeyPress} />
         ))}
-        <div className="key" onClick={() => handleKeyPress("ENTER")}>
-          ⏎
-        </div>
-        <div className="key" onClick={() => handleKeyPress("BACKSPACE")}>
-          ⌫
-        </div>
+        <KeyboardKey letter="ENTER" onClick={handleKeyPress} />
+        <KeyboardKey letter="BACKSPACE" onClick={handleKeyPress} />
       </div>
-      {showCongrats && (
+      {state.showCongrats && (
         <div className="popup">
           <div className="popup-content">
             <h2>Congratulations!</h2>
             <p>You guessed the word correctly!</p>
-            <button onClick={() => setShowCongrats(false)}>Close</button>
+            <button onClick={() => window.location.reload()}>Play Again</button>
           </div>
         </div>
       )}
     </div>
   );
+};
+
+const calculateFeedback = (guess) => {
+  const feedback = Array(4).fill("gray");
+  const secretArray = secretWord.split("");
+
+  guess.split("").forEach((letter, index) => {
+    if (letter === secretArray[index]) {
+      feedback[index] = "green";
+      secretArray[index] = null;
+    }
+  });
+
+  guess.split("").forEach((letter, index) => {
+    if (feedback[index] !== "green" && secretArray.includes(letter)) {
+      feedback[index] = "yellow";
+      secretArray[secretArray.indexOf(letter)] = null;
+    }
+  });
+
+  return feedback;
 };
 
 export default WordWrap;
