@@ -13,12 +13,21 @@ const Login = () => {
   const handleEmailSubmit = async () => {
     try {
       const response = await loginOrSignup(email);
-      if (response.needsVerification) {
-        alert("Verification code sent to your email.");
-        setStep(2);
+      console.log("Response for email submit", response);
+
+      const message = response.message.toLowerCase();
+
+      if (message.includes("verification code sent")) {
+        alert(response.message);
+        setStep(2); // Go to verification step
+      } else if (message.includes("set your password")) {
+        alert(response.message);
+        setStep(3); // Go to set password step
+      } else if (message.includes("enter your password")) {
+        alert(response.message);
+        setStep(4); // Go to login step
       } else {
-        alert("User verified. Please enter your password.");
-        setStep(3);
+        alert("Unexpected response. Please try again.");
       }
     } catch (error) {
       alert(error.message || "An error occurred. Please try again.");
@@ -28,11 +37,13 @@ const Login = () => {
   const handleVerifyCode = async () => {
     try {
       const response = await verifyCode(email, verificationCode);
-      if (response.success) {
-        alert("Verification successful. Please set your password.");
-        setStep(3);
+      console.log("Response for Code Verification", response);
+
+      if (response.message.toLowerCase().includes("verified successfully")) {
+        alert(response.message);
+        setStep(3); // Now allow setting password
       } else {
-        alert(response.message || "Invalid verification code. Try again.");
+        alert(response.message || "Invalid verification code.");
       }
     } catch (error) {
       alert(error.message || "An error occurred. Please try again.");
@@ -42,11 +53,14 @@ const Login = () => {
   const handleLogin = async () => {
     try {
       const response = await loginOrSignup(email, password);
-      if (response.success) {
-        alert("Login successful! Redirecting to dashboard.");
+      console.log("Response for Login", response);
+
+      if (response.token) {
+        alert(response.message || "Login successful!");
+        // Optionally store token: localStorage.setItem("token", response.token);
         navigate("/");
       } else {
-        alert(response.message || "Invalid credentials. Please try again.");
+        alert(response.message || "Invalid credentials.");
       }
     } catch (error) {
       alert(error.message || "An error occurred. Please try again.");
@@ -59,6 +73,7 @@ const Login = () => {
         <h1 className="logo-title">Welcome to BrainFlex</h1>
         <p className="tagline">Login to play and challenge your mind!</p>
 
+        {/* Step 1: Enter Email */}
         {step === 1 && (
           <div className="form-container">
             <input
@@ -71,6 +86,7 @@ const Login = () => {
           </div>
         )}
 
+        {/* Step 2: Enter Verification Code */}
         {step === 2 && (
           <div className="form-container">
             <p>We’ve sent a verification code to your email.</p>
@@ -84,7 +100,21 @@ const Login = () => {
           </div>
         )}
 
+        {/* Step 3: Set Password (First-time user after verification) */}
         {step === 3 && (
+          <div className="form-container">
+            <input
+              type="password"
+              placeholder="Set your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <button onClick={handleLogin}>Set Password</button>
+          </div>
+        )}
+
+        {/* Step 4: Enter Password (Returning user) */}
+        {step === 4 && (
           <div className="form-container">
             <input
               type="password"
