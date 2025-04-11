@@ -62,7 +62,7 @@ body {
 }
 
 /* Navbar Styles */
-.navbar {
+/* .navbar {
   background-color: var(--border-color);
   padding: 1rem 0;
 }
@@ -82,7 +82,7 @@ body {
 
 .nav-links a:hover {
   color: var(--accent-primary);
-}
+} */
 
 /* Home Container Styles */
 .home-container {
@@ -116,6 +116,7 @@ body {
 /* Game Card Styles */
 .game-card {
   position: relative;
+  z-index: 10; /* Lower than the dropdown */
   background-color: var(--border-color);
   border-radius: 5px;
   overflow: hidden;
@@ -248,7 +249,7 @@ body {
   height: auto;
 }
 
-.dropdown-menu {
+/* .dropdown-menu {
   position: absolute;
   top: 40px;
   right: 0;
@@ -279,7 +280,7 @@ body {
 
 .dropdown-menu li a:hover {
   color: #00a3ff;
-}
+} */
 
 /* src/components/DynamicInstructions.css */
 .instructions-container {
@@ -349,6 +350,156 @@ button {
   cursor: pointer;
 }
 
+.button-style {
+  color: var(--text-primary);
+  padding: 10px 20px;
+  background-color: var(--button-primary);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.button-style:hover {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
 button:hover {
   background-color: var(--accent-primary);
+}
+
+
+/* Navbar Styles */
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--border-color);
+  position: relative;
+}
+
+/* Navbar links (except user section) */
+.nav-links {
+  display: flex;
+  justify-content: center;
+  list-style: none;
+  gap: 2rem;
+  flex: 1; /* Allow this section to take up space */
+}
+
+.nav-links a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+  color: var(--accent-primary);
+}
+
+/* User section (profile & login) */
+.user-section {
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 20px;
+}
+
+.navbar .user-section a {
+  color: var(--text-primary);
+  padding: 10px 20px;
+  background-color: var(--button-primary);
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.navbar .user-section a:hover {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
+}
+
+.navbar .user-section .profile-icon {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  margin-left: 15px;
+}
+
+.navbar .user-section .profile-icon img {
+  width: 40px;
+  height: auto;
+  border-radius: 50%;
+}
+
+.username-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--button-primary);
+  padding: 10px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.username-container:hover {
+  background-color: var(--accent-primary);
+}
+
+.username-box {
+  color: var(--text-primary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.dropdown-icon {
+  color: var(--text-primary);
+  font-size: 0.75rem;
+  margin-top: 2px;
+}
+
+/* Refined Dropdown */
+.user-info {
+  position: relative;
+  z-index: 20;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--border-color);
+  color: var(--text-primary);
+  border-radius: 4px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  width: 200px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  z-index: 100; /* Ensure it appears above other elements */
+}
+
+.dropdown-menu.show {
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-menu button {
+  width: 100%;
+  padding: 10px;
+  background-color: transparent;
+  border: none;
+  text-align: left;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-menu button:hover {
+  background-color: var(--accent-primary);
+  color: var(--bg-primary);
 }

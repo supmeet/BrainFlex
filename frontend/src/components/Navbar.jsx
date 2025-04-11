@@ -1,4 +1,7 @@
+// src/components/Navbar.jsx
+import React from "react";
 import { Link } from "react-router-dom";
+import UserSection from "./UserSection";
 
 const Navbar = () => {
   return (
@@ -14,6 +17,7 @@ const Navbar = () => {
           <Link to="/about">About</Link>
         </li>
       </ul>
+      <UserSection />
     </nav>
   );
 };

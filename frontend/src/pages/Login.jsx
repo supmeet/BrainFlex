@@ -57,7 +57,11 @@ const Login = () => {
 
       if (response.token) {
         alert(response.message || "Login successful!");
-        // Optionally store token: localStorage.setItem("token", response.token);
+        const userData = {
+          username: response.userName, // Assuming response contains username
+          token: response.token,
+        };
+        localStorage.setItem("user", JSON.stringify(userData));
         navigate("/");
       } else {
         alert(response.message || "Invalid credentials.");

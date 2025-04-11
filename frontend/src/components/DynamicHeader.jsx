@@ -2,12 +2,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../assets/css/styles.css";
+import UserSection from "./UserSection"; // Import the UserSection component
 
 const DynamicHeader = ({ logo, title, tagline }) => {
   return (
     <header className="dynamic-header">
       <div className="left-section">
-        <Link to="/" className="home-button">
+        <Link to="/" className="home-button button-style">
           Back to Home
         </Link>
       </div>
@@ -19,30 +20,10 @@ const DynamicHeader = ({ logo, title, tagline }) => {
         </div>
       </div>
       <div className="right-section">
-        <div className="profile-icon" onClick={() => toggleDropdown()}>
-          <img src="/user.png" alt="Profile" />
-        </div>
-        <div className="dropdown-menu">
-          <ul>
-            <li>
-              <Link to="/profile">Profile</Link>
-            </li>
-            <li>
-              <Link to="/settings">Settings</Link>
-            </li>
-            <li>
-              <Link to="/logout">Logout</Link>
-            </li>
-          </ul>
-        </div>
+        <UserSection /> {/* Add the UserSection component here */}
       </div>
     </header>
   );
-};
-
-const toggleDropdown = () => {
-  const dropdown = document.querySelector(".dropdown-menu");
-  dropdown.classList.toggle("show");
 };
 
 export default DynamicHeader;
